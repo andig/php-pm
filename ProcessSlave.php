@@ -9,7 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server;
-use React\Socket\Connection;
+use React\Stream\DuplexResourceStream;
+use React\Stream\ReadableResourceStream;
 use Symfony\Component\Debug\ErrorHandler;
 
 class ProcessSlave
@@ -36,9 +37,9 @@ class ProcessSlave
     protected $loop;
 
     /**
-     * Connection to ProcessManager, master process.
+     * DuplexResourceStream to ProcessManager, master process.
      *
-     * @var \React\Socket\Connection
+     * @var DuplexResourceStream
      */
     protected $controller;
 
@@ -292,11 +293,13 @@ class ProcessSlave
                 break;
             }
         }
+
         if (!$client) {
             $message = "Could not bind to {$this->config['controllerHost']}. Error: [$errno] $errstr";
             throw new \RuntimeException($message, $errno);
         }
-        $this->controller = new \React\Socket\Connection($client, $this->loop);
+
+        $this->controller = new DuplexResourceStream($client, $this->loop);
 
         $pcntl = new \MKraemer\ReactPCNTL\PCNTL($this->loop);
 
@@ -338,7 +341,7 @@ class ProcessSlave
         $this->loop->run();
     }
 
-    public function commandBootstrap(array $data, Connection $conn)
+    public function commandBootstrap(array $data, DuplexResourceStream $conn)
     {
         $this->bootstrap($this->appBootstrap, $this->config['app-env'], $this->isDebug());
 
@@ -433,7 +436,7 @@ class ProcessSlave
 
     /**
      * @param RequestInterface $request
-     * @return ResponseInterface returns ResponseInterface if successfully served, false otherwise
+     * @return ResponseInterface|false returns ResponseInterface if successfully served, false otherwise
      */
     protected function serveStatic(RequestInterface $request)
     {
@@ -480,8 +483,7 @@ class ProcessSlave
                 'Cache-Control' => 'max-age=' . $expires,
                 'Last-Modified' => gmdate('D, d M Y H:i:s', $mTime) . ' GMT',
                 'Expires' => gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT'
-            ]);
-            $response->getBody()->write(file_get_contents($filePath));
+            ], new ReadableResourceStream(fopen($filePath, 'r'), $this->loop));
 
             return $response;
         }
