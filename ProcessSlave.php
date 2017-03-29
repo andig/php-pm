@@ -104,7 +104,7 @@ class ProcessSlave
      *
      * 'port' => int (server port)
      * 'appenv' => string (App environment)
-     * 'static' => boolean (true) (If it should server static files)
+     * 'static-directory' => string (Static files root directory)
      * 'logging' => boolean (false) (If it should log all requests)
      * ...
      *
@@ -202,15 +202,15 @@ class ProcessSlave
     }
 
     /**
-     * @return boolean
+     * @return string
      */
-    protected function isServingStatic()
+    protected function getStaticDirectory()
     {
-        return $this->config['static'];
+        return $this->config['static-directory'];
     }
 
     /**
-     * @return Bridges\BridgeInterface
+     * @return BridgeInterface
      */
     protected function getBridge()
     {
@@ -379,14 +379,14 @@ class ProcessSlave
      */
     protected function handleRequest(RequestInterface $request)
     {
-        if ($bridge = $this->getBridge()) {
-
-            if ($this->isServingStatic()) {
-                $staticResponse = $this->serveStatic($request);
-                if ($staticResponse instanceof ResponseInterface) {
-                    return $staticResponse;
-                }
+        if ($this->getStaticDirectory()) {
+            $staticResponse = $this->serveStatic($request);
+            if ($staticResponse instanceof ResponseInterface) {
+                return $staticResponse;
             }
+        }
+
+        if ($bridge = $this->getBridge()) {
 
             $response = $bridge->onRequest($request);
 

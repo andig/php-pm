@@ -98,9 +98,9 @@ class ProcessManager
     protected $logging = true;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $servingStatic = true;
+    protected $staticDirectory = '';
 
     /**
      * @var string
@@ -343,19 +343,19 @@ class ProcessManager
     }
 
     /**
-     * @return boolean
+     * @return string
      */
-    public function isServingStatic()
+    public function getStaticDirectory()
     {
-        return $this->servingStatic;
+        return $this->staticDirectory;
     }
 
     /**
-     * @param boolean $servingStatic
+     * @param string $staticDirectory
      */
-    public function setServingStatic($servingStatic)
+    public function setStaticDirectory($staticDirectory)
     {
-        $this->servingStatic = $servingStatic;
+        $this->staticDirectory = $staticDirectory;
     }
 
     public function setPIDFile($pidfile)
@@ -1139,7 +1139,7 @@ class ProcessManager
             'app-env' => $this->getAppEnv(),
             'debug' => $this->isDebug(),
             'logging' => $this->isLogging(),
-            'static' => $this->isServingStatic(),
+            'static-directory' => $this->getStaticDirectory(),
         ];
 
         $config = var_export($config, true);
