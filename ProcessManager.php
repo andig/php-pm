@@ -178,6 +178,13 @@ class ProcessManager
     protected $maxRequests = 2000;
 
     /**
+     * Flag controlling populating $_SERVER var for older applications (not using full request-response flow)
+     *
+     * @var bool
+     */
+    protected $populateServer = true;
+
+    /**
      * Timeout in seconds for master to worker connection.
      *
      * @var int
@@ -252,6 +259,22 @@ class ProcessManager
 
         unlink($this->pidfile);
         exit;
+    }
+
+    /**
+     * @param bool $populateServer
+     */
+    public function setPopulateServer($populateServer)
+    {
+        $this->populateServer = $populateServer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPopulateServer()
+    {
+        return $this->populateServer;
     }
 
     /**
@@ -1140,6 +1163,7 @@ class ProcessManager
             'debug' => $this->isDebug(),
             'logging' => $this->isLogging(),
             'static-directory' => $this->getStaticDirectory(),
+            'populate-server-var' => $this->isPopulateServer()
         ];
 
         $config = var_export($config, true);
