@@ -5,6 +5,7 @@ namespace PHPPM;
 
 use React\Socket\Connection;
 use React\Stream\ReadableResourceStream;
+use React\Stream\DuplexResourceStream;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Process\ProcessUtils;
@@ -46,7 +47,7 @@ class ProcessManager
     protected $web;
 
     /**
-     * @var \React\SocketClient\TcpConnector
+     * @var \React\Socket\TcpConnector
      */
     protected $tcpConnector;
 
@@ -424,7 +425,7 @@ class ProcessManager
         $this->web = new \React\Socket\Server(sprintf('%s:%d', $this->host, $this->port), $this->loop);
         $this->web->on('connection', array($this, 'onWeb'));
 
-        $this->tcpConnector = new \React\SocketClient\TcpConnector($this->loop);
+        $this->tcpConnector = new \React\Socket\TcpConnector($this->loop);
 
         $pcntl = new \MKraemer\ReactPCNTL\PCNTL($this->loop);
 
@@ -731,7 +732,9 @@ class ProcessManager
      */
     public function onSlaveConnection(Connection $conn)
     {
-        $this->bindProcessMessage($conn);
+        var_dump($conn);
+        $slaveStream = new DuplexResourceStream($conn, $this->loop);
+        $this->bindProcessMessage($slaveStream);
 
         $conn->on(
             'close',
