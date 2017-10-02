@@ -3,19 +3,23 @@ declare(ticks = 1);
 
 namespace PHPPM;
 
-use Evenement\EventEmitterInterface;
-use MKraemer\ReactPCNTL\PCNTL;
 use PHPPM\Bridges\BridgeInterface;
 use PHPPM\Debug\BufferingLogger;
 use PHPPM\React\Server as PPMSocketServer; // custom implementation
+use Evenement\EventEmitterInterface;
+use MKraemer\ReactPCNTL\PCNTL;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server as HttpServer;
+use React\Http\MiddlewareRunner;
+use React\Http\Middleware\RequestBodyBufferMiddleware;
+use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Promise\Promise;
 use React\Stream\DuplexResourceStream;
+use React\Stream\DuplexStreamInterface;
 use React\Stream\ReadableResourceStream;
 use Symfony\Component\Debug\ErrorHandler;
 
@@ -43,9 +47,9 @@ class ProcessSlave
     protected $loop;
 
     /**
-     * DuplexResourceStream to ProcessManager, master process.
+     * DuplexStreamInterface to ProcessManager, master process.
      *
-     * @var DuplexResourceStream
+     * @var DuplexStreamInterface
      */
     protected $controller;
 
@@ -340,7 +344,13 @@ class ProcessSlave
         // our version for now, because of unix socket support
         $this->server = new PPMSocketServer($this->loop, $port, $host); 
 
-        $httpServer = new HttpServer([$this, 'onRequest']);
+        $middlewares = new MiddlewareRunner([
+            new RequestBodyBufferMiddleware(16 * 1024 * 1024), // 16 MiB
+            new RequestBodyParserMiddleware(),
+            [$this, 'onRequest']
+        ]);
+
+        $httpServer = new HttpServer($middlewares);
         $httpServer->listen($this->server);
 
         // while (true) {
@@ -357,7 +367,7 @@ class ProcessSlave
         $this->loop->run();
     }
 
-    public function commandBootstrap(array $data, DuplexResourceStream $conn)
+    public function commandBootstrap(array $data, DuplexStreamInterface $conn)
     {
         $this->bootstrap($this->appBootstrap, $this->config['app-env'], $this->isDebug());
 

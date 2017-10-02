@@ -5,6 +5,7 @@ namespace PHPPM;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Stream\DuplexResourceStream;
+use React\Stream\DuplexStreamInterface;
 
 class Client
 {
@@ -21,7 +22,7 @@ class Client
     protected $loop;
 
     /**
-     * @var DuplexResourceStream
+     * @var DuplexStreamInterface
      */
     protected $connection;
 
@@ -32,7 +33,7 @@ class Client
     }
 
     /**
-     * @return DuplexResourceStream
+     * @return DuplexStreamInterface
      */
     protected function getConnection()
     {

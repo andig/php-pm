@@ -3,6 +3,7 @@ declare(ticks = 1);
 
 namespace PHPPM;
 
+use PHPPM\React\Server as PPMSocketServer; // custom implementation
 use React\Socket\Connection;
 use React\Socket\ConnectionInterface;
 use React\Stream\ReadableResourceStream;
@@ -417,7 +418,7 @@ class ProcessManager
 
         $this->loop = \React\EventLoop\Factory::create();
         $this->controllerHost = $this->getNewControllerHost();
-        $this->controller = new React\Server($this->loop, self::CONTROLLER_PORT, $this->controllerHost);
+        $this->controller = new PPMSocketServer($this->loop, self::CONTROLLER_PORT, $this->controllerHost);
         $this->controller->on('connection', array($this, 'onSlaveConnection'));
 
         $this->web = new \React\Socket\Server(sprintf('%s:%d', $this->host, $this->port), $this->loop);

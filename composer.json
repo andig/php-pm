@@ -21,10 +21,7 @@
     "autoload": {
         "psr-4": {
             "PHPPM\\": ""
-        },
-        "files": [
-            "React/RequestHeaderParser.php"
-        ]
+        }
     },
     "suggest": {
         "php-pm/httpkernel-adapter": "HttpKernel adapter for Symfony and Laravel frameworks",
