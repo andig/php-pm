@@ -21,12 +21,13 @@ class Server extends EventEmitter implements ServerInterface
     public $master;
     private $loop;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(LoopInterface $loop, $port, $host = '127.0.0.1')
     {
         $this->loop = $loop;
+        $this->listen($port, $host);
     }
 
-    public function listen($port, $host = '127.0.0.1')
+    private function listen($port, $host)
     {
         $localSocket = '';
         if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
@@ -53,6 +54,7 @@ class Server extends EventEmitter implements ServerInterface
             $message = "Could not bind to $localSocket . Error: [$errno] $errstr";
             throw new \RuntimeException($message, $errno);
         }
+        
         stream_set_blocking($this->master, 0);
         $this->loop->addReadStream($this->master, function ($master) {
             $newSocket = stream_socket_accept($master);

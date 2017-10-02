@@ -7,12 +7,13 @@ use Evenement\EventEmitterInterface;
 use MKraemer\ReactPCNTL\PCNTL;
 use PHPPM\Bridges\BridgeInterface;
 use PHPPM\Debug\BufferingLogger;
+use PHPPM\React\Server as PPMSocketServer; // custom implementation
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
-use React\Http\Server;
+use React\Http\Server as HttpServer;
 use React\Promise\Promise;
 use React\Stream\DuplexResourceStream;
 use React\Stream\ReadableResourceStream;
@@ -331,15 +332,17 @@ class ProcessSlave
             )
         );
 
-        $this->server = new React\Server($this->loop); //our version for now, because of unix socket support
 
-        new Server($this->server, [$this, 'onRequest']);
-
-        //port is only used for tcp connection. If unix socket, 'host' contains the socket path
+        // port is only used for tcp connection. If unix socket, 'host' contains the socket path
         $port = $this->config['port'];
         $host = $this->config['host'];
 
-        $this->server->listen($port, $host);
+        // our version for now, because of unix socket support
+        $this->server = new PPMSocketServer($this->loop, $port, $host); 
+
+        $httpServer = new HttpServer([$this, 'onRequest']);
+        $httpServer->listen($this->server);
+
         // while (true) {
         //     try {
         //         $this->server->listen($port, $host);
