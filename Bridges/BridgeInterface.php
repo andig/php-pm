@@ -17,13 +17,4 @@ interface BridgeInterface extends RequestHandlerInterface
      * @see http://stackphp.com
      */
     public function bootstrap($appBootstrap, $appenv, $debug, LoopInterface $loop);
-
-    /**
-     * Handle the request and return a response.
-     *
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
-    // public function handle(ServerRequestInterface $request);
 }
