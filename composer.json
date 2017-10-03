@@ -34,6 +34,9 @@
         "ext-event": "Allows for use of a more performant event-loop implementation."
     },
     "bin": ["bin/ppm"],
-    "repositories": [
-    ]
+    "config": {
+       "platform": {
+           "php": "5.6"
+       }
+    }
 }
