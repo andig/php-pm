@@ -47,7 +47,7 @@ class ProcessSlave
     protected $loop;
 
     /**
-     * DuplexStreamInterface to ProcessManager, master process.
+     * DuplexStreamInterface to ProcessManager master process
      *
      * @var DuplexStreamInterface
      */
@@ -444,13 +444,11 @@ class ProcessSlave
         }
 
         if ($bridge = $this->getBridge()) {
-
-            $response = $bridge->process($request);
-
+            $response = $bridge->handle($request);
             $this->sendCurrentFiles();
-        } else {
-            $response = new Response(404);
-            $response->getBody()->write('No Bridge Defined.');
+        } 
+        else {
+            $response = new Response(404, [], 'No Bridge defined');
         }
 
         if (headers_sent()) {
@@ -509,7 +507,7 @@ class ProcessSlave
         }
 
         if (!isset($this->staticBasePath)) {
-            $this->staticBasePath = realpath($this->getBridge()->getStaticDirectory());
+            $this->staticBasePath = realpath($this->getStaticDirectory());
         }
         $filePath = realpath($this->staticBasePath . $path);
 

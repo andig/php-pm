@@ -2,10 +2,10 @@
 
 namespace PHPPM\Bridges;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\Server\RequestHandlerInterface;
 use React\EventLoop\LoopInterface;
 
-interface BridgeInterface extends DelegateInterface
+interface BridgeInterface extends RequestHandlerInterface
 {
     /**
      * Bootstrap an application
@@ -17,4 +17,13 @@ interface BridgeInterface extends DelegateInterface
      * @see http://stackphp.com
      */
     public function bootstrap($appBootstrap, $appenv, $debug, LoopInterface $loop);
+
+    /**
+     * Handle the request and return a response.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    // public function handle(ServerRequestInterface $request);
 }
