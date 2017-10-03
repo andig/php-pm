@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c13795216f40d9c63b1e95fbfb6c98d8",
+    "content-hash": "23e61bc089363e861339a4360a897233",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -51,6 +51,57 @@
                 "event-emitter"
             ],
             "time": "2012-11-02T14:49:47+00:00"
+        },
+        {
+            "name": "http-interop/http-middleware",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/http-interop/http-middleware.git",
+                "reference": "b49e1f9f6c584e704317b563302e566b8ce11858"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/http-interop/http-middleware/zipball/b49e1f9f6c584e704317b563302e566b8ce11858",
+                "reference": "b49e1f9f6c584e704317b563302e566b8ce11858",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Interop\\Http\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP server-side middleware",
+            "keywords": [
+                "http",
+                "middleware",
+                "psr",
+                "psr-15",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2017-09-18T15:27:03+00:00"
         },
         {
             "name": "mkraemer/react-pcntl",
@@ -449,12 +500,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http.git",
-                "reference": "a6625240624aef57b0058e362c1caaab5906cabe"
+                "reference": "ed0fc63c428b8becc14ca422c805a8a3ebbaa3d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http/zipball/a6625240624aef57b0058e362c1caaab5906cabe",
-                "reference": "a6625240624aef57b0058e362c1caaab5906cabe",
+                "url": "https://api.github.com/repos/reactphp/http/zipball/ed0fc63c428b8becc14ca422c805a8a3ebbaa3d2",
+                "reference": "ed0fc63c428b8becc14ca422c805a8a3ebbaa3d2",
                 "shasum": ""
             },
             "require": {
@@ -490,7 +541,7 @@
                 "server",
                 "streaming"
             ],
-            "time": "2017-10-02T08:48:28+00:00"
+            "time": "2017-10-02T14:12:33+00:00"
         },
         {
             "name": "react/promise",
