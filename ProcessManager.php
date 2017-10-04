@@ -559,8 +559,8 @@ class ProcessManager
             $start = microtime(true);
 
             $headersToReplace = [
-                'X-PHP-PM-Remote-IP' => trim(parse_url('tcp://' . $incoming->getRemoteAddress(), PHP_URL_HOST), '[]'),
-                'X-PHP-PM-Remote-Port' => trim(parse_url('tcp://' . $incoming->getRemoteAddress(), PHP_URL_PORT), '[]')
+                'X-PHP-PM-Remote-IP' => trim(parse_url($incoming->getRemoteAddress(), PHP_URL_HOST), '[]'),
+                'X-PHP-PM-Remote-Port' => trim(parse_url($incoming->getRemoteAddress(), PHP_URL_PORT), '[]')
             ];
 
             $headerRedirected = false;
