@@ -5,7 +5,6 @@ namespace PHPPM;
 
 use PHPPM\Bridges\BridgeInterface;
 use PHPPM\Debug\BufferingLogger;
-use PHPPM\React\Server as PPMSocketServer; // custom implementation
 use Evenement\EventEmitterInterface;
 use MKraemer\ReactPCNTL\PCNTL;
 use Psr\Http\Message\ResponseInterface;
@@ -336,13 +335,11 @@ class ProcessSlave
             )
         );
 
-
         // port is only used for tcp connection. If unix socket, 'host' contains the socket path
         $port = $this->config['port'];
         $host = $this->config['host'];
 
-        // our version for now, because of unix socket support
-        $this->server = new PPMSocketServer($this->loop, $port, $host); 
+        $this->server = SocketFactory::getServer($host, $port, $this->loop);
 
         $middlewares = new MiddlewareRunner([
             new RequestBodyBufferMiddleware(16 * 1024 * 1024), // 16 MiB
@@ -352,15 +349,6 @@ class ProcessSlave
 
         $httpServer = new HttpServer($middlewares);
         $httpServer->listen($this->server);
-
-        // while (true) {
-        //     try {
-        //         $this->server->listen($port, $host);
-        //         break;
-        //     } catch (\Exception $e) {
-        //         usleep(500);
-        //     }
-        // }
 
         $this->sendMessage($this->controller, 'register', ['pid' => getmypid(), 'port' => $port]);
 
