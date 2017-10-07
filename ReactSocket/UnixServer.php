@@ -1,7 +1,6 @@
 <?php
 
 namespace React\Socket;
-// namespace PHPPM\React;
 
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;
