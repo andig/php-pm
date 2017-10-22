@@ -34,10 +34,5 @@
         "ext-libev": "Allows for use of a more performant event-loop implementation.",
         "ext-event": "Allows for use of a more performant event-loop implementation."
     },
-    "bin": ["bin/ppm"],
-    "config": {
-       "platform": {
-           "php": "5.6"
-       }
-    }
+    "bin": ["bin/ppm"]
 }
