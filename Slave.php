@@ -35,7 +35,7 @@ class Slave
      * Slave port - this is an identifier mapped to a socket path
      */
     private $port;
-    
+
     private $process;
     private $pid;
     private $connection; // slave incoming
@@ -211,6 +211,16 @@ class Slave
     public function getHandledRequests()
     {
         return $this->handledRequests;
+    }
+
+    /**
+     * Get maximum number of request slave can handle
+     *
+     * @return int handled requests
+     */
+    public function getMaxRequests()
+    {
+        return $this->maxRequests;
     }
 
     /**
