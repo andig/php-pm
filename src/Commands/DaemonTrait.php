@@ -7,13 +7,15 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
+/**
+ * DaemonTrait is borrowed from https://github.com/phlib/console-process/blob/df8b875f05666444ef34b183abbfe96740fa0272/src/Command/DaemonCommand.php
+
+ */
 trait DaemonTrait
 {
     /**
      * Split into a new process. Returns true when it's the child process and false
      * for the parent process.
-     *
-     * Borrowed from https://github.com/phlib/console-process/blob/master/src/Command/DaemonCommand.php
      *
      * @return bool
      */
@@ -37,7 +39,6 @@ trait DaemonTrait
     }
 
     /**
-     * Borrowed from https://github.com/phlib/console-process/blob/master/src/Command/DaemonCommand.php
      * @param InputInterface $input
      * @return InputInterface
      */
@@ -47,7 +48,6 @@ trait DaemonTrait
     }
 
     /**
-     * Borrowed from https://github.com/phlib/console-process/blob/master/src/Command/DaemonCommand.php
      * @param OutputInterface $output
      * @return OutputInterface
      */
